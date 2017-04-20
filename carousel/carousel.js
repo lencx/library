@@ -144,7 +144,6 @@ function Carousel(args) {
                     clearInterval(timer)
                     showCurrEl(list[index])
                     elIndex()
-                    console.log(index)
                 })
                 i.addEventListener('mouseout', function() {
                     args.autoPlay ? time() : ''
@@ -174,7 +173,7 @@ function Carousel(args) {
             }
             showCurrEl()
             elIndex()
-            time()
+            args.autoPlay ? time() : ''
         })
     }
     clickBtn(0)
