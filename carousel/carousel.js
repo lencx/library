@@ -3,31 +3,33 @@
  * @author Lencx
  * @param {Object}
  * => Object: {
- *      selector: string, // Picture collection
+ *      selector: string, // Container
+ *      elCollection: string, // Element collection
  *      // default value: 2000ms
- *      time: number, // Picture automatic switching time
+ *      time: number, // Element automatic switching time
  *      // default value: 0.02
  *      fadeInStep: number // Step length[0 - 1]: The greater the value, the faster the transition.
  *      autoPlay: boolean,
- *      pictureIndex: boolean,
+ *      navIndex: boolean,
  *      indexStyle: string // [number | disc]
  *    }
  * @example
  * => new Carousel({
- *      selector: '.carousel img', // Picture collection
+ *      selector: '#carousel' // Container
+ *      elCollection: '.carousel img', // Element collection
  *      time: 1000, // Unit milliseconds
  *      fadeInStep: 0.05, // 0 - 1
  *      autoPlay: true,
- *      pictureIndex: true,
+ *      navIndex: true,
  *      indexStyle: 'disc' // or `number`
  *    })
- * Important: please add `carousel` id name to HTML(carousel container).
- * =>  <div id="carousel" class="banner">
- *         // picture list code
+ * Important: please add `carousel` class name to HTML(carousel container). [carousel stylesheet]
+ * =>  <div id="#carousel" class="banner carousel">
+ *         // Element list code
  *     </div>
  */
 function Carousel(args) {
-    const list = document.querySelectorAll(args.selector)
+    const list = document.querySelectorAll(args.elCollection)
     const listLen = list.length
     let timer
     let numList
@@ -61,10 +63,8 @@ function Carousel(args) {
         return _el
     }
 
-    // Create picture index
+    // Create element index
     function createNum() {
-        // const numEl = document.createElement('ul')
-        // numEl.setAttribute('class', 'carousel-num')
         let numEl = creatEl('ul', 'class', 'carousel-num')
         let li = ''
         for(let i=0; i<listLen; i++) {
@@ -78,22 +78,22 @@ function Carousel(args) {
             }
         }
         numEl.innerHTML = li
-        document.querySelector('#carousel').appendChild(numEl)
-        numList = document.querySelectorAll('#carousel .carousel-num li')
+        document.querySelector(args.selector).appendChild(numEl)
+        numList = document.querySelectorAll(args.selector + ' .carousel-num li')
         numEl.style.marginLeft = -numEl.offsetWidth / 2 + 'px' 
     }
-    args.pictureIndex ? createNum() : ''
+    args.navIndex ? createNum() : ''
 
     // Create prev & next
     !function switchBtn() {
         let switchBtn = creatEl('div', 'class', 'switch-btn')
-        document.querySelector('#carousel').appendChild(switchBtn)
+        document.querySelector(args.selector).appendChild(switchBtn)
         let btn = '<span class="prev"></span><span class="next"></span>'
         switchBtn.innerHTML = btn
     }()
 
-    // Picture
-    function pictureEl() {
+    // Current element show
+    function showCurrEl() {
         list.forEach(function(i) {
             i.style.display = 'none'
             i.style.opacity = 0
@@ -102,9 +102,9 @@ function Carousel(args) {
         fadeIn(list[index])
     }
 
-    // Picture index
-    function pictureIndex() {
-        if(args.pictureIndex) {
+    // Element index
+    function elIndex() {
+        if(args.navIndex) {
             numList.forEach(function(i) {
                 // i.removeAttribute('class', 'on')
                 i.classList.remove('on')
@@ -119,8 +119,8 @@ function Carousel(args) {
             if(index === listLen) {
                 index = 0
             }  
-            pictureEl()
-            pictureIndex()
+            showCurrEl()
+            elIndex()
         }, args.time)
     }
 
@@ -128,7 +128,7 @@ function Carousel(args) {
         for(let i=0,len=list.length; i<len; i++) {
             if(i === 0) {
                 list[i].style.display = 'block'
-                args.pictureIndex ? numList[i].classList.add('on') : ''
+                args.navIndex ? numList[i].classList.add('on') : ''
             } else {
                 list[i].style.display = 'none'
             }
@@ -136,14 +136,15 @@ function Carousel(args) {
     }()
 
     function mouse() {
-        if(args.pictureIndex) {
+        if(args.navIndex) {
             numList.forEach(function(i) {
                 i.addEventListener('mouseover', function() {
                     let _index = i.attributes['data-index'].value
                     index = _index
                     clearInterval(timer)
-                    pictureEl(list[index])
-                    pictureIndex()
+                    showCurrEl(list[index])
+                    elIndex()
+                    console.log(index)
                 })
                 i.addEventListener('mouseout', function() {
                     args.autoPlay ? time() : ''
@@ -160,19 +161,19 @@ function Carousel(args) {
     args.autoPlay ? autoPlay() : mouse()
 
     // Click prev or next
-    let btnAll = document.querySelectorAll('#carousel .switch-btn span')
+    let btnAll = document.querySelectorAll(args.selector + ' .switch-btn span')
     function clickBtn(i) {
         btnAll[i].addEventListener('click', function() {
             clearInterval(timer)
             if(i === 0) {
-                if(index === 0) index = listLen
                 index--
+                if(index === -1) index = listLen - 1
             } else {
                 index++
                 if(index === listLen) index = 0
             }
-            pictureEl()
-            pictureIndex()
+            showCurrEl()
+            elIndex()
             time()
         })
     }
