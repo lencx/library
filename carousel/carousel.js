@@ -80,7 +80,6 @@ function Carousel(args) {
         numEl.innerHTML = li
         document.querySelector('#carousel').appendChild(numEl)
         numList = document.querySelectorAll('#carousel .carousel-num li')
-        console.log(numEl.offsetWidth)
         numEl.style.marginLeft = -numEl.offsetWidth / 2 + 'px' 
     }
     args.pictureIndex ? createNum() : ''
@@ -161,5 +160,22 @@ function Carousel(args) {
     args.autoPlay ? autoPlay() : mouse()
 
     // Click prev or next
-    // let btnAll = document.querySelectorAll('#carousel .switch-btn span')
+    let btnAll = document.querySelectorAll('#carousel .switch-btn span')
+    function clickBtn(i) {
+        btnAll[i].addEventListener('click', function() {
+            clearInterval(timer)
+            if(i === 0) {
+                if(index === 0) index = listLen
+                index--
+            } else {
+                index++
+                if(index === listLen) index = 0
+            }
+            pictureEl()
+            pictureIndex()
+            time()
+        })
+    }
+    clickBtn(0)
+    clickBtn(1)
 }

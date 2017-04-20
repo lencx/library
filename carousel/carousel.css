@@ -1,7 +1,9 @@
 #carousel {
     position: relative;
 }
-
+#carousel:hover .switch-btn {
+    display: block;
+}
 #carousel .carousel-num {
     position: absolute;
     bottom: 10px;
@@ -11,7 +13,6 @@
     border-radius: 17px;
     left: 50%;
 }
-
 #carousel .carousel-num li {
     list-style: none;
     width: 24px;
@@ -35,6 +36,7 @@
 }
 
 #carousel .switch-btn {
+    display: none;
 }
 #carousel .switch-btn span {
     position: absolute;
