@@ -36,8 +36,8 @@
 }
 
 .carousel .switch-btn {
-    width: 0;
-    height: 0;
+    width: 0 !important;
+    height: 0 !important;
     display: none;
 }
 .carousel .switch-btn span {
