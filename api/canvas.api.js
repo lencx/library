@@ -29,6 +29,7 @@ function CanvasApp(selector) {
  * => $.drawRect(200, 200, 200, 100, 'red', 10) // not filled and line width is `10`
  */
 CanvasApp.prototype.drawRect = function(x, y, width, height, color, isFill) {
+    this.ctx.save()
     if(color === 'clear') {
         this.ctx.clearRect(x, y, width, height)
     } else {
@@ -64,6 +65,7 @@ CanvasApp.prototype.drawRect = function(x, y, width, height, color, isFill) {
  * => $.drawArc(200, 200, 100, 0, 80, 'rgba(0, 100, 200, .5)', 80, true, 10, false) // not filled and line widtth is `10`
  */
 CanvasApp.prototype.drawArc = function(x, y, radius, startDeg, endDeg, color, startPoint, anticlockwise, isFill, isOnlyArc) {
+    this.ctx.save()
     if(isFill === true) {
         this.ctx.fillStyle = color
         this.ctx.beginPath()
@@ -101,6 +103,7 @@ CanvasApp.prototype.drawArc = function(x, y, radius, startDeg, endDeg, color, st
  * => $.drawSector(200, 200, 100, 0, 80, 'rgba(0, 100, 200, .5)', 80, true, 5) // not filled and line width is `5`
  */
 CanvasApp.prototype.drawSector = function(x, y, radius, startDeg, endDeg, color, startPoint, anticlockwise, isFill) {
+    this.ctx.save()
     this.ctx.beginPath()
     this.ctx.moveTo(x, y)
     this.arcStartPoint(x, y, radius, startDeg, endDeg, startPoint, anticlockwise)
@@ -135,13 +138,14 @@ CanvasApp.prototype.drawSector = function(x, y, radius, startDeg, endDeg, color,
  * => $.drawRoundRect(200, 200, 100, 200, 10, '#00f', 5) // not filled and line width is `5`
  */
 CanvasApp.prototype.drawRoundRect = function(x, y, width, height, radius, color, isFill, tr, br, bl, tl) {
+    this.ctx.save()
     this.ctx.beginPath()
     let xr = x + radius
     let xw = x + width
     let yr = y + radius
     let yw = y + width
     let yh = y + height
-    tl || tr || br || bl ? this.ctx.moveTo(x, y) : this.ctx.moveTo(xr, y)
+    typeof (tl || tr || br || bl) === null ? this.ctx.moveTo(x, y) : this.ctx.moveTo(xr, y)
     tr === undefined || tr === null ? this.ctx.arcTo(xw, y, xw, yr, radius) : this.ctx.lineTo(xw, y)
     br === undefined || br === null ? this.ctx.arcTo(xw, yh, xw - radius, yh, radius) : this.ctx.lineTo(xw, yh)
     bl === undefined || bl === null ? this.ctx.arcTo(x, yh, x, yh - radius, radius) : this.ctx.lineTo(x, yh)
@@ -193,7 +197,7 @@ CanvasApp.prototype.drawPolygon = function(centerX, centerY, sideLen, sideNum, c
     }
     this.ctx.closePath()
     if(isFill === true) {
-        this.fillStyle = color
+        this.ctx.fillStyle = color
         this.ctx.fill()
     } else {
         if(typeof isFill === 'number') this.ctx.lineWidth = isFill
