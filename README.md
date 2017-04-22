@@ -24,4 +24,5 @@ $.drawSector(x, y, radius, startDeg, endDeg, color, startPoint, anticlockwise, i
 $.drawRoundRect(x, y, width, height, radius, color, isFill, tr, br, bl, tl)
 $.drawSolidLine(startX, startY, endX, endY, lineWidth, color)
 $.drawDashLine(startX, startY, endX, endY, color, setLineDash, lineWidth, lineCap)
+$.drawPolygon(centerX, centerY, sideLen, sideNum, color, sideIndent, rotateAngle, isFill)
 ```
