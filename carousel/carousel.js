@@ -1,6 +1,7 @@
 /**
  * Image Carousel
  * @author Lencx
+ * {@link https://github.com/lencx/library/blob/master/carousel/carousel.js}
  * @param {Object}
  * => Object: {
  *      selector: string, // Container

@@ -2,6 +2,7 @@
  * Utility functions for the canvas package
  * @author Lencx
  * @license Apache-2.0
+ * {@link https://github.com/lencx/library/blob/master/api/canvas.api.js}
  */
 
 'use strict';
