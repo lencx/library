@@ -41,6 +41,7 @@ CanvasApp.prototype.drawRect = function(x, y, width, height, color, isFill) {
             this.ctx.strokeRect(x, y, width, height)
         }
     }
+    this.ctx.restore()
 }
 
 /**
@@ -77,6 +78,7 @@ CanvasApp.prototype.drawArc = function(x, y, radius, startDeg, endDeg, color, st
         !isOnlyArc ? this.ctx.closePath() : ''
         this.ctx.stroke()
     }
+    this.ctx.restore()
 }
 
 /**
@@ -111,6 +113,7 @@ CanvasApp.prototype.drawSector = function(x, y, radius, startDeg, endDeg, color,
         this.ctx.strokeStyle = color
         this.ctx.stroke()
     }
+    this.ctx.restore()
 }
 
 /**
@@ -152,6 +155,7 @@ CanvasApp.prototype.drawRoundRect = function(x, y, width, height, radius, color,
         this.ctx.strokeStyle = color
         this.ctx.stroke()
     }
+    this.ctx.restore()
 }
 
 /**
@@ -196,6 +200,7 @@ CanvasApp.prototype.drawPolygon = function(centerX, centerY, sideLen, sideNum, c
         this.ctx.strokeStyle = color
         this.ctx.stroke()
     }
+    this.ctx.restore()
 }
 
 /**
