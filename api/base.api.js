@@ -67,6 +67,39 @@ function createEl(createEl, selector) {
 }
 
 /*******************************************************
+ * CSS
+ *******************************************************/
+
+/**
+ * Get RGB
+ * @param {String} color
+ * @example
+ * => getRgb('#aac')
+ * => getRgb('#cc8811')
+ * => getRgb('#AAbb11')
+ */
+function getRgb(color) {
+    function int(num) {
+        return parseInt(num, 16)
+    }
+    function rep(str) {
+        return str.toString().repeat(2)
+    }
+    let _str
+    if(/^#([0-9a-fA-F]{6})/.test(color) && color.length === 7 || /^#([0-9a-fA-F]{3})/.test(color) && color.length === 4) {
+        if(color.length === 7) {
+            _str = color.match(/^#([\w]{2})([\w]{2})([\w]{2})/)
+            return `rgb(${int(_str[1])}, ${int(_str[2])}, ${int(_str[3])})`
+        } else {
+            _str = color.match(/^#(\w)(\w)(\w)/)
+            return `rgb(${int(rep(_str[1]))}, ${int(rep(_str[2]))}, ${int(rep(_str[3]))})`
+        }
+    } else {
+        return console.log('Invalid hex, please enter a legal color value, for example: `#ffa`, `#00a`, `#CCAAbb` or `#00aaCC` etc.')
+    }
+}
+
+/*******************************************************
  * Events
  *******************************************************/
 
@@ -124,3 +157,19 @@ function bind(el, event, cb) {
         el.attachEvent('on' + event, cb)
     }
 }
+
+typeof document.createElement('canvas').getContext === "function"
+
+function isWeixinBrowser(){
+    return /micromessenger/.test(navigator.userAgent.toLowerCase())
+}
+
+window.requestAnimationFrame = window.requestAnimationFrame
+|| window.mozRequestAnimationFrame
+|| window.webkitRequestAnimationFrame
+|| window.msRequestAnimationFrame
+|| function(f) {return setTimeout(f, 1000/60)}
+
+window.cancelAnimationFrame = window.cancelAnimationFrame
+|| window.mozCancelAnimationFrame
+|| function(requestID) {clearTimeout(requestID)}
