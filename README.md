@@ -32,3 +32,15 @@ $.drawPolygon(centerX, centerY, sideLen, sideNum, color, sideIndent, rotateAngle
 // 1. when the parameter `color` equal `clear` to `drawRect()`, clears the specified rectangle area.
 // 2. when the type of parameter `color` in all methods is a `number`, the line width is set.
 ```
+
+## Pagination
+
+[Pagination Demo](https://lencx.github.io/demo/pagination/)
+
+```js
+new Pagination(document.getElementById('pagination'), {
+    total: 10,
+    curr: 1,
+    step: 2
+})
+```
