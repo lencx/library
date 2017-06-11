@@ -1,6 +1,7 @@
-function Pagination(selector, args) {
+function Pagination(args, cb) {
     const o = {
         code: '',
+        el: args.el,
         Extend(data={}) {
             o.total = data.total || 300;
             o.curr = data.curr || 1;
@@ -18,8 +19,8 @@ function Pagination(selector, args) {
             o.code += '<a>1</a><a>2</a><a>3</a><i>...</i>';
         },
         DisableBtn() {
-            let prev = document.querySelector('#pagination .prev').classList
-            let next = document.querySelector('#pagination .next').classList
+            let prev = document.querySelector(`${o.el} .prev`).classList
+            let next = document.querySelector(`${o.el} .next`).classList
             if(o.curr === 1) {
                 prev.add('disable')
                 next.remove('disable')
@@ -57,7 +58,10 @@ function Pagination(selector, args) {
         Bind() {
             const a = o.e.getElementsByTagName('a')
             for (let i = 0; i < a.length; i++) {
-                if (+a[i].innerHTML === o.curr) a[i].className = 'curr'
+                if (+a[i].innerHTML === o.curr) {
+                    a[i].className = 'curr'
+                    cb(a[i])
+                }
                 a[i].addEventListener('click', o.Click, false)
             }
         },
@@ -87,13 +91,11 @@ function Pagination(selector, args) {
         },
         Buttons(e) {
             const nav = e.getElementsByTagName('a')
-            nav[0].addEventListener('click', o.Prev, false)
-            nav[1].addEventListener('click', o.Next, false)
-        },
-        FirstLast(e) {
-            const firstLast = e.getElementsByTagName('b')
-            firstLast[0].addEventListener('click', o.firstPage, false)
-            firstLast[1].addEventListener('click', o.lastPage, false)
+            nav[1].addEventListener('click', o.Prev, false)
+            nav[2].addEventListener('click', o.Next, false)
+
+            nav[0].addEventListener('click', o.firstPage, false)
+            nav[3].addEventListener('click', o.lastPage, false)
         },
         firstPage() {
             o.curr = 1;
@@ -106,51 +108,55 @@ function Pagination(selector, args) {
             o.Start()
         },
         Jump() {
-            let jumpNum =document.querySelector('#pagination input')
+            let jumpNum =document.querySelector(`${o.el} input`)
             jumpNum.addEventListener('keyup', (e) => {
                 let key = event.which || event.keyCode || event.charCode
                 if(key === 13) {
                     let val = parseInt(jumpNum.value)
                     if(!isNaN(val) && val>= 1 && val <= o.total) {
                         o.curr = val
+                        o.Start()
                         o.DisableBtn()
-                        o.e.getElementsByTagName('a')[val-1].className = 'curr'
                     } else {
                         alert(`Please enter a number from 1 - ${o.total}`)
                     }
-                    o.Start()
                 }
             })
         },
         Create(e) {
             const html = [
-                '<b>First Page</b>',
+                '<a class="first">First Page</a>',
                 '<a class="prev">&#9668;</a>',
-                '<span></span>',
+                '<span class="page"></span>',
                 '<a class="next">&#9658;</a>',
-                '<b>Last Page</b>',
+                '<a class="last">Last Page</a>',
                 '<p class="jump">Jump <input type="text"> page</p>'
             ];
             e.innerHTML = html.join('')
             o.e = e.getElementsByTagName('span')[0];
             o.Buttons(e)
-            o.FirstLast(e)
             o.Jump(e)
         },
-        Init(e, data) {
+        Init(data) {
+            let e = document.querySelector(data.el)
             o.Extend(data)
             o.Create(e)
             o.Start()
         }
     }
     const init = () => {
-        o.Init(selector, args)
+        o.Init(args)
     }
     document.addEventListener('DOMContentLoaded', init, false)
 }
 
-// new Pagination(document.getElementById('pagination'), {
-//     total: 10,
-//     curr: 1,
-//     step: 2
-// })
+/******
+new Pagination({
+    el: '#pagination',
+    total: 25,
+    curr: 1,
+    step: 3
+}, (e) => {
+    console.log(e)
+})
+******/

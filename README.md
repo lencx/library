@@ -38,9 +38,12 @@ $.drawPolygon(centerX, centerY, sideLen, sideNum, color, sideIndent, rotateAngle
 [Pagination Demo](https://lencx.github.io/demo/pagination/)
 
 ```js
-new Pagination(document.getElementById('pagination'), {
-    total: 10,
+new Pagination({
+    el: '#pagination',
+    total: 25,
     curr: 1,
-    step: 2
+    step: 3
+}, (e) => {
+    console.log(e)
 })
 ```
