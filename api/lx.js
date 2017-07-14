@@ -50,3 +50,19 @@ function sendCode(opts) {
         }
     })
 }
+
+/**
+ * Download File
+ * @param {String} filename
+ * @param {Any} content
+ * @example
+ * => downloadFile('1.txt', 'test .....')
+ */
+function downloadFile(filename, content) {
+    let link = document.createElement('a')
+    let blob = new Blob([content])
+    link.download = filename
+    link.href = URL.createObjectURL(blob)
+    link.click()
+    URL.revokeObjectURL(blob)
+}
