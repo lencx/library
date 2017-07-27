@@ -66,3 +66,60 @@ function downloadFile(filename, content) {
     link.click()
     URL.revokeObjectURL(blob)
 }
+
+
+/**
+ * jQuery Accordion
+ * @param {String} selector - contanier
+ * @param {String} selector - click element
+ * @param {Boolean} open - open the number of content
+ * => false: Only open one
+ * => true: All content is not collapsed
+ * @example
+ * => css
+ * #accordion .item {
+ *     display: none;
+ * }
+ * #accordion li:first-child .item {
+ *     display: block;
+ * }
+ * => html
+ * <div id='accordion'>
+ *     <ul>
+ *         <li>
+ *             <div class='link'>Click 1</div> 
+ *             <div class='item'>Collapse content 1</div> 
+ *         </li>
+ *         <li>
+ *             <div class='link'>Click 2</div> 
+ *             <div class='item'>Collapse content 2</div> 
+ *         </li>
+ *     </ul>
+ * </div>
+ * => js
+ * new Accordion({
+ *     el: $('#accordion'),
+ *     clickEl: '.link',
+ *     mulit: false
+ * })
+ */
+class Accordion {
+    constructor(opts) {
+        this.el = opts.el
+        this.mulit = opts.mulit || false
+        this.el.find(opts.clickEl).on('click', {
+            el: this.el,
+            mulit: this.mulit
+        }, this.dropdown)
+    }
+    dropdown (e) {
+        let $el = e.data.el,
+            $this = $(this),
+            $next = $(this).next()
+        $next.slideToggle()
+        $this.parent().toggleClass('on')
+        if(!e.data.mulit) {
+            $el.find('.item').not($next).slideUp().parent().removeClass('on')
+        }
+    }
+}
