@@ -70,7 +70,7 @@ function downloadFile(filename, content) {
 
 /**
  * jQuery Accordion
- * @param {String} selector - contanier
+ * @param {Object} selector - contanier
  * @param {String} selector - click element
  * @param {Boolean} open - open the number of content
  * => false: Only open one

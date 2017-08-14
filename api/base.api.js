@@ -254,10 +254,75 @@ function bind(el, event, cb) {
     }
 }
 
+/**
+ * Device type judgment
+ * @param {String} type - Device type [Android, iPad, iPhone, Mac, Win, Linux, Mobile, wx(wechat)]
+ * @param {Function || Null} cb - Callback execution of this device
+ * @example
+ * // usage alias
+ *  type | alias
+ *  ------------------
+ *  android => android
+ *  iPad => ipad
+ *  iPhone => iphone
+ *  Macintosh => mac
+ *  Windows => win
+ *  Linux => linux
+ *  Mobile => mobile
+ *  MicroMessenger => wx(wechat)
+ * 
+ * => deviceType('mac') // true or false
+ * => deviceType('iphone', () => {
+ *        // code
+ *    })
+ * => deviceType('wx', () => {
+ *        // code
+ *    })
+ * => deviceType('wx', () => {
+ *      deviceType('iphone', () => {
+ *          alert('is wechat && iphone')
+ *      })
+ *    })
+ */
+function deviceType(type, cb) {
+    let ua = navigator.userAgent
+    let device = [
+        'Android',
+        'iPad',
+        'iPhone',
+        'Macintosh',
+        'Windows',
+        'Linux',
+        'Mobile',
+        'MicroMessenger'
+    ]
+    function callback() {
+        cb === undefined ? console.log(true) : cb()
+    }
+    if(type===('wx'||'wechat') && new RegExp('MicroMessenger').test(ua)) {
+        callback()
+        console.log(false)
+        return
+    } else {
+        device.some(i => {
+            if(new RegExp(type, 'i').test(i) && new RegExp(i).test(ua)) {
+                callback()
+                return
+            }
+        })
+    }
+}
+
+
+/********************************** Other ***************************/
+
 typeof document.createElement('canvas').getContext === "function"
 
 function isWeixinBrowser(){
     return /micromessenger/.test(navigator.userAgent.toLowerCase())
+}
+function isMobile() {
+    /Mobile/i.test(navigator.userAgent)
 }
 
 window.requestAnimationFrame = window.requestAnimationFrame
