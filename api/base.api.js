@@ -149,6 +149,47 @@ function randomHsla({s=80, l=60, a=1}) {
     return `hsla(${Math.ceil(Math.random()*360)}, ${s}%, ${l}%, ${a})`
 }
 
+/*
+ *  Modify the pseudo-class style
+ * *********************
+<style>
+h1::after {
+    width: 20px;
+    height: 20px;
+    content: '';
+    display: block;
+    background: red;
+}
+</style>
+<h1></h1>
+<script>
+document.styleSheets[0].addRule('h1::after','width: 50px')
+</script> 
+*/
+
+
+/**
+ * Toggle Class
+ * @param {eventType} envent type
+ * @param {String} HTML tag
+ * @param {String} class name
+ * @example
+ * => html
+ * <button class='btn'>Click</button>
+ * 
+ * => js
+ * toggleClass('click', '.btn', 'on')
+ */
+function toggleClass(eventType, el, classname) {
+    let _el = document.querySelector(el)
+    _el.addEventListener(eventType, () => {
+        _el.classList.contains(classname)
+            ? _el.classList.remove(classname)
+            : _el.classList.add(classname)
+    })
+}
+
+
 /*******************************************************
  * Array
  *******************************************************/
@@ -311,6 +352,58 @@ function deviceType(type, cb) {
             }
         })
     }
+}
+
+
+/**
+ * Template data is filled
+ * @example
+ * => html
+ * <template>
+ *    <li>
+ *      <span style='background:#eee;'>{{id}}</span>
+ *      <span>{{title}}</span>
+ *    </li>
+ *  </template>
+ *  <ul></ul>
+ * 
+ * => js
+ * getData({
+ *     url: '/api/articles/page?code=apply_article&size=10&page=1',
+ *     target: 'ul',
+ *     el: 'template',
+ *     cb: function(res, str) {
+ *        res.data.data.some(i => {
+ *            // console.log(arguments)
+ *           str += tpl(arguments[2], {
+ *               title: i.title,
+ *               id: i.eid
+ *           })
+ *        })
+ *        return str
+ *    }
+ * })
+ */
+ /**
+  * @param {String} html
+  * @param {Object} data
+  */
+function tpl(html, data) {
+    return document.querySelector(html).innerHTML.replace(/{{\w+}}/g, str => {
+        let prop = str.replace(/{{|}}/g, '')
+        return data[prop] || ''
+    })
+}
+/**
+ * @param {Object} args (url:string | target:string | el:string | cb:function)
+ */
+function getData(args) {
+    // https://github.com/axios/axios
+    axios.get(args.url)
+        .then(res => {
+            let _html = ''
+            return document.querySelector(args.target).innerHTML = args.cb(res, _html, args.el)
+        })
 }
 
 
