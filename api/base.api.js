@@ -54,12 +54,16 @@ function removeClass(el, cls) {
  * => createEl('span')
  * => createEl('span', '#span-id')
  * => createEl('span', '.span-class')
+ * => createEl('div', '#toggle.btn')
  */
 function createEl(createEl, selector) {
     let _el = document.createElement(createEl)
     if(selector !== undefined) {
-        if(new RegExp(/^#/).test(selector)) _el.setAttribute('id', selector.split('#')[1])
-        else if(new RegExp(/^./).test(selector)) _el.setAttribute('class', selector.split('.')[1])
+        let _s = selector.match(/#(\w|-)+|\.(\w|-)+/g)
+        _s.some(i => {
+            if(/#/.test(i)) _el.setAttribute('id', i.split('#')[1])
+            else if(/./.test(i)) _el.setAttribute('class', i.split('.')[1])
+        })
         return _el
     } else {
         return _el
