@@ -47,3 +47,7 @@ new Pagination({
     console.log(e)
 })
 ```
+
+## DOC
+
+- [RegExp](./regexp.md)
