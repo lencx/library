@@ -410,6 +410,97 @@ function getData(args) {
         })
 }
 
+/**
+ * Generated UUID
+ * https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+ */
+function gUUID() {
+    let d = new Date().getTime()
+    if(typeof performance !== 'undefined' && typeof performance.now === 'function') {
+        d += performance.now()
+    }
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+        let r = (d + Math.random() * 16) % 16 | 0
+        d = Math.floor(d / 16)
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
+    })
+}
+
+
+/**
+ * Set Cookie
+ * @param {String} key - name
+ * @param {String} val - value
+ */
+function setCookie(key, val) {
+    document.cookie = `${key}=${val}`
+}
+
+/**
+ * Get Cookie
+ * @param {String} key - name
+ */
+function getCookie(key) {
+    let _key = `${key}=`
+    let _val
+    document.cookie.split(';').some(i => {
+        let _v = i.trim()
+        return _val = _v.indexOf(key) === 0
+            ? _v.substring(_key.length, _v.length)
+            : void 0
+    })
+    return _val
+}
+
+/**
+ * Boolean string to Boolean
+ * @param {String} str - true/false
+ */
+function toBool(str) {
+    return (/^true$/i.test(str))
+}
+
+/**
+ * Set localStorage
+ * @param {String} key - name
+ * @param {String|Object} val - value
+ */
+function setStorage(key, val) {
+    localStorage.setItem(key, Object.prototype.toString.call(val) === '[object Object]'
+        ? JSON.stringify(val) : val
+    )
+}
+
+/**
+ * Get localStorage
+ * @param {String} key - name
+ */
+function getStorage(key) {
+    let _key = localStorage.getItem(key)
+    let _reg = {
+        int: /^-?\d+$/,
+        float: /^(-?\d+)(\.\d+)$/,
+        bool: /^(true)|(false)$/i,
+        obj: /^\{|\}$/,
+    }
+    function regexp(reg) {
+        return reg.test(_key)
+    }
+    if(regexp(_reg.int)) {
+        _key = parseInt(_key)
+    }
+    if(regexp(_reg.float)) {
+        _key = parseFloat(_key)
+    }
+    if(regexp(_reg.bool)) {
+        _key = toBool(_key)
+    }
+    if(regexp(_reg.obj)) {
+        _key = JSON.parse(_key)
+    }
+    return _key
+}
+
 
 /********************************** Other ***************************/
 
