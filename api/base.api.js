@@ -100,34 +100,22 @@ function tpl(html, inserts, data) {
 /*******************************************************
  * CSS
  *******************************************************/
-
 /**
- * Get RGB
- * @param {String} color
+ * Hexcode to RGB
+ * @param {String} hex - color
+ * {@link https://github.com/Chalarangelo/30-seconds-of-code#hexcode-to-rgb}
  * @example
- * => getRgb('#aac')
- * => getRgb('#cc8811')
- * => getRgb('#AAbb11')
+ *  hexToRgb('#acd') => rgb(170, 204, 221)
+ *  hexToRgb('#aaccdd') => rgb(170, 204, 221)
  */
-function getRgb(color) {
-    function int(num) {
-        return parseInt(num, 16)
-    }
-    function rep(str) {
-        return str.toString().repeat(2)
-    }
-    let _str
-    if(/^#([0-9a-fA-F]{6})/.test(color) && color.length === 7 || /^#([0-9a-fA-F]{3})/.test(color) && color.length === 4) {
-        if(color.length === 7) {
-            _str = color.match(/^#([\w]{2})([\w]{2})([\w]{2})/)
-            return `rgb(${int(_str[1])}, ${int(_str[2])}, ${int(_str[3])})`
-        } else {
-            _str = color.match(/^#(\w)(\w)(\w)/)
-            return `rgb(${int(rep(_str[1]))}, ${int(rep(_str[2]))}, ${int(rep(_str[3]))})`
-        }
-    } else {
-        return console.log('Invalid hex, please enter a legal color value, for example: `#ffa`, `#00a`, `#CCAAbb` or `#00aaCC` etc.')
-    }
+const hexToRgb = hex => {
+    let _hex = hex.slice(1)
+    let h
+    h = parseInt(_hex.length === 3
+            ? Array.prototype.map.call(_hex, i => h += i.repeat(2))[2].slice(9)
+            : _hex
+        , 16)
+    return `rgb(${h >> 16}, ${(h & 0x00ff00) >> 8}, ${h & 0x0000ff})`
 }
 
 /** Random Color
@@ -463,10 +451,10 @@ function toBool(str) {
 /**
  * Set localStorage
  * @param {String} key - name
- * @param {String|Object} val - value
+ * @param {String|Number|Object|Array} val - value
  */
 function setStorage(key, val) {
-    localStorage.setItem(key, Object.prototype.toString.call(val) === '[object Object]'
+    localStorage.setItem(key, Object.prototype.toString.call(val) === '[object Object]' || '[object Array]'
         ? JSON.stringify(val) : val
     )
 }
@@ -481,7 +469,7 @@ function getStorage(key) {
         int: /^-?\d+$/,
         float: /^(-?\d+)(\.\d+)$/,
         bool: /^(true)|(false)$/i,
-        obj: /^\{|\}$/,
+        obj: /^\[?\{|\}\]?$/,
     }
     function regexp(reg) {
         return reg.test(_key)
